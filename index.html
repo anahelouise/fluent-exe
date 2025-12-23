@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FluentAI - Industrial 80s</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'retro': ['"Press Start 2P"', 'cursive'],
+              'term': ['"VT323"', 'monospace'],
+            },
+            colors: {
+              retro: {
+                orange: '#1DB954',      // Main accent (Green #1DB954)
+                'orange-dim': '#15853D', // Dimmer green
+                gray: '#a3a3a3',        // Primary text/border gray
+                'gray-dark': '#333333', // Panel backgrounds
+                black: '#0a0a0a',       // Main background
+                surface: '#141414'      // Secondary background
+              }
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'glitch': 'glitch 1s linear infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'flicker': 'flicker 0.3s infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              flicker: {
+                '0%': { opacity: '0.98' },
+                '50%': { opacity: '0.95' },
+                '100%': { opacity: '0.98' },
+              }
+            }
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #0a0a0a;
+        color: #a3a3a3;
+        font-family: 'VT323', monospace;
+      }
+      
+      /* Retro Grid Background - Green Tint */
+      .retro-grid {
+        background-image: 
+          linear-gradient(rgba(29, 185, 84, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(29, 185, 84, 0.1) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: center bottom;
+        min-height: 100vh;
+        position: relative;
+      }
+      
+      /* CRT Scanline Effect */
+      .scanlines::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        z-index: 50;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+      }
+      
+      /* Text Phosphor Glow - Green */
+      .text-glow {
+        text-shadow: 0 0 2px currentColor, 0 0 5px rgba(29, 185, 84, 0.5);
+      }
+
+      /* Custom Scrollbar for Terminal */
+      ::-webkit-scrollbar {
+        width: 12px;
+        background: #141414;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1DB954; 
+        border: 2px solid #141414;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #15853D; 
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+  }
+}
+</script>
+</head>
+  <body class="retro-grid scanlines">
+    <div id="root"></div>
+  </body>
+</html>

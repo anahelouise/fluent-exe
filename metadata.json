@@ -1,0 +1,7 @@
+{
+  "name": "Fluent.exe",
+  "description": "An immersive language learning application offering real-time voice conversations with an AI English tutor using the Gemini Live API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
