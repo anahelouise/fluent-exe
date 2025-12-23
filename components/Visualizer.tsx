@@ -12,79 +12,93 @@ const Visualizer: React.FC<VisualizerProps> = ({ isActive, volume }) => {
   return (
     <div className="relative w-72 h-72 flex items-center justify-center">
       
-      {/* Housing */}
-      <div className="absolute inset-0 rounded-full border-4 border-retro-gray-dark bg-black shadow-[0_0_50px_rgba(29,185,84,0.15)] overflow-hidden relative">
+      {/* Scope Housing */}
+      <div className="absolute inset-0 rounded-full border-4 border-retro-gray-dark bg-black shadow-[0_0_50px_rgba(29,185,84,0.15)] overflow-hidden">
         
-        {/* Scanlines */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none z-50" 
+        {/* CRT Scanline Background */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" 
              style={{ 
                backgroundImage: 'linear-gradient(transparent 50%, rgba(0,0,0,0.5) 50%)',
                backgroundSize: '100% 4px' 
              }}>
         </div>
         
+        {/* Grid */}
+        <div className="absolute inset-0 opacity-20" 
+             style={{ 
+               backgroundImage: 'linear-gradient(#15853D 1px, transparent 1px), linear-gradient(90deg, #15853D 1px, transparent 1px)', 
+               backgroundSize: '20px 20px' 
+             }}>
+        </div>
+
+        {/* Static Axis Lines */}
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-retro-gray/30 z-0"></div>
+        <div className="absolute left-1/2 top-0 h-full w-[1px] bg-retro-gray/30 z-0"></div>
+
         {/* Vignette */}
-        <div className="absolute inset-0 rounded-full shadow-[inset_0_0_60px_rgba(0,0,0,0.9)] pointer-events-none z-50"></div>
+        <div className="absolute inset-0 rounded-full shadow-[inset_0_0_60px_rgba(0,0,0,0.9)] pointer-events-none z-30"></div>
 
-        {/* --- RADAR LAYERS --- */}
+        {isActive ? (
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+             <svg viewBox="0 0 200 100" className="w-full h-full filter drop-shadow-[0_0_8px_rgba(29,185,84,0.6)]">
+                
+                {/* Wave 1: Primary Green (Stable) */}
+                <path 
+                  d="M0,50 Q25,20 50,50 T100,50 T150,50 T200,50" 
+                  fill="none" 
+                  stroke="#15853D" 
+                  strokeWidth="2" 
+                  className="opacity-70"
+                  style={{ 
+                    transformOrigin: 'center',
+                    transform: `scaleY(${1 + v * 4})` 
+                  }}
+                />
 
-        {/* 1. The Grid (Fixed) */}
-        <div className="absolute inset-0 z-20 opacity-40">
-           <svg viewBox="0 0 200 200" className="w-full h-full">
-              {/* Main Crosshair */}
-              <line x1="100" y1="0" x2="100" y2="200" stroke="#15853D" strokeWidth="1" />
-              <line x1="0" y1="100" x2="200" y2="100" stroke="#15853D" strokeWidth="1" />
-              
-              {/* Concentric Rings */}
-              <circle cx="100" cy="100" r="90" stroke="#15853D" strokeWidth="1" fill="none" strokeDasharray="4 4" />
-              <circle cx="100" cy="100" r="60" stroke="#15853D" strokeWidth="1" fill="none" />
-              <circle cx="100" cy="100" r="30" stroke="#15853D" strokeWidth="1" fill="none" strokeDasharray="2 2" />
-           </svg>
-        </div>
+                {/* Wave 2: Bright Green (Reactive) */}
+                <path 
+                  d="M0,50 Q20,80 40,50 T80,50 T120,50 T160,50 T200,50" 
+                  fill="none" 
+                  stroke="#1DB954" 
+                  strokeWidth="2"
+                  style={{ 
+                    transformOrigin: 'center',
+                    transform: `scaleY(${0.5 + v * 10}) translateX(${-v * 10}px)` 
+                  }}
+                />
 
-        {/* 2. The Sweep (Rotating) */}
-        <div className={`absolute inset-0 z-10 ${isActive ? 'animate-[spin_3s_linear_infinite]' : 'opacity-0 transition-opacity duration-500'}`}>
-           <div className="w-full h-full rounded-full" 
-                style={{ background: 'conic-gradient(from 0deg, transparent 0deg, transparent 240deg, rgba(29, 185, 84, 0.4) 360deg)' }}>
-           </div>
-        </div>
-
-        {/* 3. The Object / Volume Reactivity (Center) */}
-        <div className="absolute inset-0 z-30 flex items-center justify-center">
-            {/* Central Dot */}
-            <div className={`rounded-full bg-retro-orange transition-all duration-75 ease-out shadow-[0_0_15px_#1DB954]
-                            ${isActive ? 'opacity-100' : 'opacity-20'}`}
-                 style={{
-                   width: isActive ? `${10 + v * 60}px` : '8px',
-                   height: isActive ? `${10 + v * 60}px` : '8px',
-                 }}
-            />
-            
-            {/* Echo Ring based on volume */}
-            {isActive && v > 0.05 && (
-               <div className="absolute rounded-full border border-retro-orange/60 animate-[ping_1s_cubic-bezier(0,0,0.2,1)_infinite]"
-                    style={{ 
-                        width: `${20 + v * 100}%`, 
-                        height: `${20 + v * 100}%` 
-                    }}
-               ></div>
-            )}
-        </div>
+                {/* Wave 3: White Hot (High Intensity) */}
+                <path 
+                  d="M0,50 Q10,30 20,50 T40,50 T60,50 T80,50 T100,50 T120,50 T140,50 T160,50 T180,50 T200,50" 
+                  fill="none" 
+                  stroke="#FFFFFF" 
+                  strokeWidth="1.5"
+                  className="opacity-90"
+                  style={{ 
+                    transformOrigin: 'center',
+                    transform: `scaleY(${0.2 + v * 15})` 
+                  }}
+                />
+             </svg>
+             
+             {/* Digital Noise Overlay on high volume */}
+             {v > 0.4 && (
+                <div className="absolute inset-0 bg-retro-orange/10 mix-blend-overlay animate-pulse"></div>
+             )}
+          </div>
+        ) : (
+          /* Idle State: Flat Line */
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+             <div className="w-full h-[2px] bg-retro-gray/40 shadow-[0_0_10px_rgba(29,185,84,0.5)]"></div>
+          </div>
+        )}
 
       </div>
       
-      {/* Labels */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-2 bg-black px-2 text-[10px] text-retro-gray font-term border border-retro-gray-dark tracking-widest">
-        RADAR_LINK
-      </div>
-      
-      {/* Dynamic degree markers */}
-      <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-2 text-[8px] text-retro-gray font-term -translate-y-1/2">270°</div>
-          <div className="absolute top-1/2 right-2 text-[8px] text-retro-gray font-term -translate-y-1/2">90°</div>
-          <div className="absolute top-2 left-1/2 text-[8px] text-retro-gray font-term -translate-x-1/2">0°</div>
-          <div className="absolute bottom-2 left-1/2 text-[8px] text-retro-gray font-term -translate-x-1/2">180°</div>
-      </div>
+      {/* External Markers */}
+      <div className="absolute -inset-4 border border-retro-gray/20 rounded-full pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-1 text-[8px] font-term text-retro-gray bg-black px-1">CH-1</div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 -mb-1 text-[8px] font-term text-retro-gray bg-black px-1">OSC</div>
 
     </div>
   );
